@@ -129,6 +129,8 @@ export default function ChatBuilderPage() {
   // Add a function to handle PDF download
   const handleDownloadPDF = async () => {
     try {
+      // Dynamically import generatePDF to avoid SSR issues
+      const { generatePDF } = await import("../../../lib/pdf-generator")
       // Use name from state for filename
       const name = conversationState.name || "Resume"
       await generatePDF("resume-preview", `${name.replace(/\s+/g, "_")}_Resume.pdf`)

@@ -147,15 +147,9 @@ JavaScript • React • Node.js • TypeScript • HTML • CSS • Git • AWS
 
   const handleDownloadPDF = async () => {
     try {
-      const filename = resumeFile?.name || "resume";
-
-      const element = document.createElement("a");
-      const file = new Blob([resumeHtml], { type: "application/pdf" });
-      element.href = URL.createObjectURL(file);
-      element.download = `${filename}.pdf`;
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
+      const { generatePDF } = await import("../../../lib/pdf-generator");
+      const filename = resumeFile?.name || "resume.pdf";
+      await generatePDF("resume-content", filename);
     } catch (error) {
       console.error("Error downloading PDF:", error);
     }
@@ -219,10 +213,11 @@ JavaScript • React • Node.js • TypeScript • HTML • CSS • Git • AWS
             className="border px-2 py-1"
           />
         </div>
-        {isComplete && (
+          {isComplete && (
           <div>
             <h2 className="text-lg font-bold mb-2">Generated Resume</h2>
             <div
+              id="resume-content"
               className="border p-4"
               dangerouslySetInnerHTML={{ __html: resumeHtml }}
             />
